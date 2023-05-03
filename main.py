@@ -8,13 +8,19 @@ class test_example(unittest.TestCase):
         self.wd.implicitly_wait(60)
 
     def test_example(self):
-        success = True
         wd = self.wd
-        wd.get('https://www.google.com/')
-        wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').click()
+        self.open_page(wd, 'https://www.google.com/')
+        self.clear_search_form(wd)
+        self.fill_serch_form(wd, 'figujhblkfjgbnlfkj')
+
+    def fill_serch_form(self, wd, Text):
+        wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').send_keys(Text)
+
+    def clear_search_form(self, wd):
         wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').clear()
-        wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').send_keys('jldfhlvdhfl')
-        self.assertTrue(success)
+
+    def open_page(self, wd, url):
+        wd.get(url)
 
     def tearDown(self):
         self.wd.quit()
