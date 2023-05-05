@@ -1,29 +1,18 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.webdriver import WebDriver
+from application import Application
 import unittest
 
 class test_example(unittest.TestCase):
     def setUp(self):
-        self.wd = WebDriver()
-        self.wd.implicitly_wait(60)
+        self.app = Application()
+
 
     def test_example(self):
-        wd = self.wd
-        self.open_page(wd, 'https://www.google.com/')
-        self.clear_search_form(wd)
-        self.fill_serch_form(wd, 'figujhblkfjgbnlfkj')
-
-    def fill_serch_form(self, wd, Text):
-        wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').send_keys(Text)
-
-    def clear_search_form(self, wd):
-        wd.find_element(By.CSS_SELECTOR, 'textarea[type="search"]').clear()
-
-    def open_page(self, wd, url):
-        wd.get(url)
+        self.app.open_page('https://www.google.com/')
+        self.app.clear_search_form()
+        self.app.fill_search_form('figujhblkfjgbnlfkj')
 
     def tearDown(self):
-        self.wd.quit()
+        self.app.destroy()
 
 
 
