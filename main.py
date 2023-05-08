@@ -5,6 +5,8 @@ import pytest
 def app(request):
     fixture = Application()
     request.addfinalizer(fixture.destroy)
+    return fixture
+
 
 def test_example(app):
     app.open_page('https://www.google.com/')
