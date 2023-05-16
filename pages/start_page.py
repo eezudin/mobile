@@ -1,8 +1,9 @@
 from pages.base_page import BasePage
 from appium.webdriver.common.appiumby import AppiumBy
+from pages.common_methods import CommonMethods
 
 
-class StartPage(BasePage):
+class StartPage(CommonMethods, BasePage):
 
     """ Locators """
     popUpCloseButton = (AppiumBy.CLASS_NAME, 'android.widget.Button')
@@ -20,4 +21,3 @@ class StartPage(BasePage):
 
     def check_user_logged(self, text):
         self.check_element_text(self.loginTitle, text)
-
