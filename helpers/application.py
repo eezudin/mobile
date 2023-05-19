@@ -6,19 +6,10 @@ from pages.side_menu import SideMenu
 
 class Application:
 
-    def __init__(self):
+    def __init__(self, capabilities):
+        self.capabilities = capabilities
         appium_server_url = 'http://localhost:4723'
-        capabilities = dict(
-            platformName='Android',
-            deviceName='emulator-5556',
-            appPackage='com.rheem.contractor',
-            app="C:\\Users\\ezudin\\PycharmProjects\\pythonProject\\resourses\\app-rheem-iat-release.apk",
-            platformVersion="11.0",
-            automationName='uiautomator2',
-            appActivity='.MainActivity'
-        )
-
-        self.driver = webdriver.Remote(appium_server_url, capabilities)
+        self.driver = webdriver.Remote(appium_server_url, self.capabilities)
         self.driver.implicitly_wait(20)
         self.start_page = StartPage(self.driver)
         self.login_page = LoginPage(self.driver)

@@ -1,11 +1,13 @@
 import pytest
 from helpers.application import Application
 from appium.webdriver.appium_service import AppiumService
+from helpers.config_reader import read_config
 
 
 @pytest.fixture
 def app(request):
-    fixture = Application()
+    capabilities = read_config(request.config.getoption("--config"))
+    fixture = Application(capabilities)
     request.addfinalizer(fixture.destroy)
     return fixture
 
@@ -16,3 +18,7 @@ def appium_server(request):
     fixture.start()
     request.addfinalizer(fixture.stop)
     return fixture
+
+
+def pytest_addoption(parser):
+    parser.addoption("--config", action="store", default='../resources/configs/emulator.properties')
