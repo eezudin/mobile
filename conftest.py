@@ -29,7 +29,7 @@ def appium_server(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--config", action="store", default='resources/configs/emulator.properties')
+    parser.addoption("--config", action="store", default='resources/emulator.properties')
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
