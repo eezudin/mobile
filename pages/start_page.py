@@ -25,4 +25,4 @@ class StartPage(CommonMethods, BasePage):
 
     @allure.step('Check the name of the user in the greeting text')
     def check_user_logged(self, expected_text):
-        self.check_element_text(self.loginTitle, expected_text)
+        self.check_element_text(self.loginTitle, f"Hello, {expected_text}!")
