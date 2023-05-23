@@ -1,3 +1,5 @@
+# Aplication
 *.apk
 
+# allure reports
 allure-reports/allure
