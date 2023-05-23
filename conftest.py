@@ -1,31 +1,68 @@
 from datetime import datetime
-
 import pytest
 import allure
-import os
 from helpers.application import Application
 from appium.webdriver.appium_service import AppiumService
 from helpers.config_reader import read_config
 
+driver_global = None
+
 
 @pytest.fixture
 def app(request):
-    """starting and stopping the driver and passing the capability"""
-    capabilities = read_config(request.config.getoption("--config"))
-    fixture = Application(capabilities)
+    """starting the driver and passing the capability"""
 
-    request.addfinalizer(fixture.destroy)
-    return fixture
+    capabilities = read_config(request.config.getoption("--config"))
+    app = Application(capabilities)
+    yield app
+    # request.addfinalizer(app.destroy)
 
 
 @pytest.fixture(scope='session', autouse=True)
 def appium_server(request):
     """starting and stopping appium server"""
+
     fixture = AppiumService()
     fixture.start()
     request.addfinalizer(fixture.stop)
     return fixture
 
+
+def pytest_addoption(parser):
+    parser.addoption("--config", action="store", default='resources/configs/emulator.properties')
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item):
+    """set up a hook to be able to check if a test has failed"""
+
+    # execute all other hooks to obtain the report object
+    outcome = yield
+    rep = outcome.get_result()
+
+    # set a report attribute for each phase of a call, which can be "setup", "call", "teardown"
+    setattr(item, "rep_" + rep.when, rep)
+
+
+@pytest.fixture(scope="function", autouse=True)
+def test_failed_check(request):
+    yield
+
+    driver = request.node.funcargs['app'].driver
+    if request.node.rep_setup.failed:
+        print("setting up a test failed!", request.node.nodeid)
+    elif request.node.rep_setup.passed:
+        if request.node.rep_call.failed:
+            take_screenshot(driver, request.node.nodeid)
+            print("executing test failed", request.node.nodeid)
+    driver.quit()
+
+
+def take_screenshot(driver, node_id):
+    file_name = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'.replace("/", "_").replace("::", "__")
+    allure.attach(
+        driver.get_screenshot_as_png(), name=f'screenshot {file_name}',
+        attachment_type=allure.attachment_type.PNG)
 
 # @pytest.fixture(scope="function")
 # def allure_report(request):
@@ -34,23 +71,5 @@ def appium_server(request):
 #     allure.environment(report=report_dir)
 #     yield
 #     pytest.main(['--alluredir', allure_report_dir, request.node.name])
-#     allure_report_cmd = f'allure generate {allure_report_dir} --clean -o {allure_report_name}'
+#     allure_report_cmd = f"allure generate {allure_report_dir} --clean -o {allure_report_name}"
 #     os.system(allure_report_cmd)
-
-
-def pytest_addoption(parser):
-    parser.addoption("--config", action="store", default='resources/configs/emulator.properties')
-
-    @pytest.hookimpl(hookwrapper=True)
-    def pytest_runtest_makereport(item, call):
-        # execute all other hooks to obtain the report object
-        outcome = yield
-        rep = outcome.get_result()
-
-        if rep.when == 'call' and rep.failed:
-            file_name = f"{datetime.now().strftime('%d_%m_%Y_%H_%M_%S_%F')}".replace("/", "_").replace("::", "__")
-            capture_path = f"./screenshots/{file_name}.png"
-            app.driver.save_screenshot(capture_path)
-            allure.attach(
-                app.driver.get_screenshot_as_png(), name=f'screenshot {file_name}',
-                attachment_type=allure.attachment_type.PNG)

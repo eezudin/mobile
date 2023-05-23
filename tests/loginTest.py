@@ -44,4 +44,3 @@ def test_failed_login(app):
     app.start_page.go_to_login_page()
     app.login_page.login('jeff.lebowski', '789')
     app.login_page.check_toast_message('Invalid Username and/or Password')
-    assert 0 == 1
