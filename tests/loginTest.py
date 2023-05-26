@@ -21,7 +21,7 @@ def test_successfully_login(app):
 @allure.story('I wanna log In!!!')
 @allure.feature('Best feature ever')
 @allure.severity('critical')
-@pytest.mark.skip('[ISSUE-12345] Broken connection')
+# @pytest.mark.skip('[ISSUE-12345] Broken connection')
 @allure.title('Log in: Side Menu')
 def test_successfully_login_2(app):
     """Try to log in with correct user from side menu"""
