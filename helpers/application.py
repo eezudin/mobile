@@ -9,6 +9,7 @@ class Application:
     def __init__(self, capabilities):
         self.capabilities = capabilities
         appium_server_url = 'http://localhost:4723'
+        # appium_server_url = 'http://localhost:4444'
         self.driver = webdriver.Remote(appium_server_url, self.capabilities)
         self.driver.implicitly_wait(20)
         self.start_page = StartPage(self.driver)
