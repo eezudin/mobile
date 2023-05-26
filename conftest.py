@@ -12,20 +12,32 @@ driver_global = None
 def app(request):
     """starting the driver and passing the capability"""
 
-    capabilities = read_config(request.config.getoption("--config"))
+    # capabilities = read_config(request.config.getoption("--config"))
+    capabilities = {
+        'automationName': 'uiautomator2',
+        'platformName': 'Android',
+        'platformVersion': '11.0',
+        'app': 'C:/Users/ezudin/PycharmProjects/pythonProject/resources/app-rheem-iat-release.apk',
+        'udid': 'emulator-5556',
+        'deviceName': 'Android Emulator',
+        'appActivity': '.MainActivity',
+        'appPackage': 'com.rheem.contractor',
+        'systemPort': 8200,
+
+    }
     app = Application(capabilities)
     yield app
     # request.addfinalizer(app.destroy)
 
 
-@pytest.fixture(scope='session', autouse=True)
-def appium_server(request):
-    """starting and stopping appium server"""
-
-    fixture = AppiumService()
-    fixture.start()
-    request.addfinalizer(fixture.stop)
-    return fixture
+# @pytest.fixture(scope='session', autouse=True)
+# def appium_server(request):
+#     """starting and stopping appium server"""
+#
+#     fixture = AppiumService()
+#     fixture.start()
+#     request.addfinalizer(fixture.stop)
+#     return fixture
 
 
 def pytest_addoption(parser):
