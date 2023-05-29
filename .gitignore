@@ -3,3 +3,6 @@
 
 # allure reports
 allure-reports/allure
+
+# selenium server
+*.jar
