@@ -14,38 +14,6 @@ def app(request):
     """starting the driver and passing the capability"""
 
     capabilities = read_config(request.config.getoption("--config"))
-    # capabilities = {}
-    # port = 0
-    # capabilities['automationName'] = 'uiautomator2'
-    # capabilities['app'] = 'C:/Users/ezudin/PycharmProjects/pythonProject/resources/app-rheem-iat-release.apk'
-    # capabilities['appActivity'] = '.MainActivity'
-    # capabilities['appPackage'] = 'com.rheem.contractor'
-    # if request.param == "device1":
-    #     port = 'http://localhost:4723'
-    #     capabilities['deviceName'] = 'Android Emulator'
-    #     capabilities['platformName'] = 'Android'
-    #     capabilities['platformVersion'] = '11.0'
-    #     capabilities['udid'] = 'emulator-5554'
-    #     capabilities['systemPort'] = 8203
-    # if request.param == "device2":
-    #     port = 'http://localhost:4733'
-    #     capabilities['deviceName'] = 'Android Real Device'
-    #     capabilities['platformName'] = 'Android'
-    #     capabilities['platformVersion'] = '11.0'
-    #     capabilities['udid'] = '7taqv8o7bixoojby'
-    #     capabilities['systemPort'] = 8201
-    # capabilities = {
-    #     'automationName': 'uiautomator2',
-    #     'platformName': 'Android',
-    #     'platformVersion': '11.0',
-    #     'app': 'C:/Users/ezudin/PycharmProjects/pythonProject/resources/app-rheem-iat-release.apk',
-    #     'udid': 'emulator-5556',
-    #     'deviceName': 'Android Emulator',
-    #     'appActivity': '.MainActivity',
-    #     'appPackage': 'com.rheem.contractor',
-    #     'systemPort': 8200,
-    #
-    # }
     app = Application(capabilities)
     yield app
     # request.addfinalizer(app.destroy)
