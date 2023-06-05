@@ -12,7 +12,7 @@ def app(request):
     """starting the driver and passing the capability"""
 
     capabilities = read_config(request.config.getoption("--config"))
-    executor = request.config.getoption("--config")
+    executor = request.config.getoption("--executor")
 
     app = Application(executor, capabilities)
     yield app
