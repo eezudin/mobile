@@ -5,8 +5,6 @@ from helpers.application import Application
 from appium.webdriver.appium_service import AppiumService
 from helpers.config_reader import read_config
 
-driver_global = None
-
 
 # @pytest.fixture(params=["device1", "device2"], scope="function")
 @pytest.fixture(scope="function")
@@ -14,7 +12,9 @@ def app(request):
     """starting the driver and passing the capability"""
 
     capabilities = read_config(request.config.getoption("--config"))
-    app = Application(capabilities)
+    executor = request.config.getoption("--config")
+
+    app = Application(executor, capabilities)
     yield app
     # request.addfinalizer(app.destroy)
 
@@ -31,6 +31,7 @@ def app(request):
 
 def pytest_addoption(parser):
     parser.addoption("--config", action="store", default='resources/grid.properties')
+    parser.addoption("--executor", action="store", default='192.168.0.19')
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

@@ -6,10 +6,12 @@ from pages.side_menu import SideMenu
 
 class Application:
 
-    def __init__(self, capabilities):
+    def __init__(self, executor,  capabilities):
         self.capabilities = capabilities
+        self.executor = executor
+
         # appium_server_url = 'http://localhost:4723'
-        appium_server_url = 'http://192.168.0.19:4444'
+        appium_server_url = f'http://{executor}:4444/wd/hub'
         self.driver = webdriver.Remote(appium_server_url, self.capabilities)
         self.driver.implicitly_wait(20)
         self.start_page = StartPage(self.driver)
