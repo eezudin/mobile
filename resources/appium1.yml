@@ -2,3 +2,6 @@ server:
   port: 4723
   use-drivers:
     - uiautomator2
+  default-capabilities:
+    appium:systemPort: 8101
+    appium:udid: emulator-5554
