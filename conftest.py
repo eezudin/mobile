@@ -12,9 +12,10 @@ def app(request):
     """starting the driver and passing the capability"""
 
     capabilities = read_config(request.config.getoption("--config"))
+    mode = request.config.getoption("--mode")
     executor = request.config.getoption("--executor")
 
-    app = Application(executor, capabilities)
+    app = Application(capabilities, mode, executor)
     yield app
     # request.addfinalizer(app.destroy)
 
@@ -23,15 +24,18 @@ def app(request):
 # def appium_server(request):
 #     """starting and stopping appium server"""
 #
-#     fixture = AppiumService()
-#     fixture.start()
-#     request.addfinalizer(fixture.stop)
-#     return fixture
+#     mode = request.config.getoption("--mode")
+#     if mode == "local":
+#         fixture = AppiumService()
+#         fixture.start()
+#         request.addfinalizer(fixture.stop)
+#         return fixture
 
 
 def pytest_addoption(parser):
-    parser.addoption("--config", action="store", default='resources/grid.properties')
-    parser.addoption("--executor", action="store", default='192.168.0.19')
+    parser.addoption("--config", action="store", default='resources/emulator.properties')
+    parser.addoption("--mode", action="store", default='local')
+    parser.addoption("--executor", action="store", default='localhost')
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
